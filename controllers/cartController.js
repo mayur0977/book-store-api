@@ -5,7 +5,6 @@ const Book = require('../models/bookModel');
 exports.addToCart = async (req, res, next) => {
   const { bookId, quantity } = req.body;
   const userId = req.user.userId; // Assuming you've extracted userId from JWT
-
   try {
     const book = await Book.findById(bookId);
     if (!book) {
