@@ -40,7 +40,10 @@ exports.getCartDetails = async (req, res, next) => {
   //   select: 'title author price' // Specify the fields you want to populate
   // }
   try {
-    const cart = await Cart.findOne({ user: userId }).populate('items.book');
+    const cart = await Cart.findOne({ user: userId }).populate({
+      path: 'items.book',
+      select: 'title thumbnail price previewLink',
+    });
     if (!cart) {
       return res.status(404).json({ message: 'Cart not found' });
     }

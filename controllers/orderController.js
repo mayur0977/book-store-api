@@ -41,7 +41,10 @@ exports.getOrderDetails = async (req, res, next) => {
   const userId = req.user.userId; // Assuming you've extracted userId from JWT
 
   try {
-    const order = await Order.find({ user: userId }).populate('items.book');
+    const order = await Order.find({ user: userId }).populate({
+      path: 'items.book',
+      select: 'title subTitle thumbnail price previewLink',
+    });
     if (!order) {
       return res.status(404).json({ message: 'Order not found' });
     }
