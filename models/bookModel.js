@@ -5,13 +5,15 @@ const slugify = require('slugify');
 const bookModelSchema = new mongoose.Schema({
   title: {
     type: String,
-    required: true,
+    required: [true, 'Book must have a name.'],
   },
   subTitle: {
     type: String,
   },
   description: {
     type: String,
+    required: [true, 'Material must have a description.'],
+    trim: true,
   },
   categories: {
     type: [String],
@@ -37,6 +39,9 @@ const bookModelSchema = new mongoose.Schema({
   },
   previewLink: {
     type: String,
+  },
+  price: {
+    type: Number,
   },
 });
 

@@ -4,7 +4,6 @@ const bcrypt = require('bcryptjs');
 // name, email,photo,password,passwordConfirm
 
 const userSchema = new mongoose.Schema({
-  
   email: {
     type: String,
     required: [true, 'Please provide your email.'],
@@ -69,5 +68,5 @@ userSchema.methods.changedPasswordAfter = function (JWTTimeStamp) {
   return false;
 };
 
-const User = mongoose.model('User', userSchema);
+const User = mongoose.model('users', userSchema);
 module.exports = User;
