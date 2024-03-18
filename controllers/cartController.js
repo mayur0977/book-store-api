@@ -35,7 +35,10 @@ exports.addToCart = async (req, res, next) => {
 
 exports.getCartDetails = async (req, res, next) => {
   const userId = req.user.userId; // Assuming you've extracted userId from JWT
-
+  // {
+  //   path: 'items.book',
+  //   select: 'title author price' // Specify the fields you want to populate
+  // }
   try {
     const cart = await Cart.findOne({ user: userId }).populate('items.book');
     if (!cart) {
