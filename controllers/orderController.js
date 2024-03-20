@@ -31,7 +31,11 @@ exports.createOrder = async (req, res, next) => {
     // Clear the cart after placing the order
     await Cart.findOneAndDelete({ user: userId });
 
-    res.json(order);
+    res.status(200).json({
+      status: 'success',
+      message: 'Order created , Please check your email',
+      data: { order },
+    });
   } catch (error) {
     next(error);
   }
@@ -46,10 +50,18 @@ exports.getOrderDetails = async (req, res, next) => {
       select: 'title subTitle thumbnail price previewLink',
     });
     if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
+      return res.status(200).json({
+        status: 'success',
+        message: '',
+        data: null,
+      });
     }
 
-    res.json(order);
+    res.status(200).json({
+      status: 'success',
+      message: '',
+      data: { order },
+    });
   } catch (error) {
     next(error);
   }

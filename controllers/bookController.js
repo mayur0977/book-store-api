@@ -14,8 +14,7 @@ exports.getAllBooks = catchAsync(async (req, res, next) => {
   //Send response
   res.status(200).json({
     status: 'success',
-    requestTime: req.requestTime,
-    results: books.length,
+    message: '',
     data: { books },
   });
 });
@@ -28,16 +27,18 @@ exports.getBookById = catchAsync(async (req, res, next) => {
 
   res.status(200).json({
     status: 'success',
+    message: '',
     data: { book },
   });
 });
 
 exports.createBook = catchAsync(async (req, res, next) => {
-  const newBook = await Book.create(req.body);
+  await Book.create(req.body);
 
   res.status(201).json({
     status: 'success',
-    data: { newBook },
+    message: 'Book Added successfully',
+    data: null,
   });
 });
 
@@ -50,7 +51,11 @@ exports.updateBookItem = catchAsync(async (req, res, next) => {
   if (!bookItem) {
     return next(new AppError('No book item found with that ID', 400));
   }
-  res.status(200).json({ status: 'success', data: bookItem });
+  res.status(200).json({
+    status: 'success',
+    message: 'Book updated successfully',
+    data: bookItem,
+  });
 });
 
 exports.deleteBookItem = catchAsync(async (req, res, next) => {
@@ -58,5 +63,11 @@ exports.deleteBookItem = catchAsync(async (req, res, next) => {
   if (!bookItem) {
     return next(new AppError('No book item found with that ID', 400));
   }
-  res.status(200).json({ status: 'success', data: null });
+  res
+    .status(200)
+    .json({
+      status: 'success',
+      message: 'Book deleted successfully',
+      data: null,
+    });
 });

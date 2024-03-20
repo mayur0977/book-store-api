@@ -8,8 +8,7 @@ exports.getAllUsers = catchAsync(async (req, res) => {
   //Send response
   res.status(200).json({
     status: 'success',
-    requestTime: req.requestTime,
-    results: users.length,
+    message: '',
     data: { users },
   });
 });

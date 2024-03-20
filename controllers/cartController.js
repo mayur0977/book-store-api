@@ -27,7 +27,11 @@ exports.addToCart = async (req, res, next) => {
 
     await cart.save();
 
-    res.json(cart);
+    res.status(200).json({
+      status: 'success',
+      message: '',
+      data: { cart },
+    });
   } catch (error) {
     next(error);
   }
@@ -45,10 +49,17 @@ exports.getCartDetails = async (req, res, next) => {
       select: 'title thumbnail price previewLink',
     });
     if (!cart) {
-      return res.status(404).json({ message: 'Cart not found' });
+      return res.status(200).json({
+        status: 'success',
+        message: '',
+        data: null,
+      });
     }
-
-    res.json(cart);
+    res.status(200).json({
+      status: 'success',
+      message: '',
+      data: { cart },
+    });
   } catch (error) {
     next(error);
   }
