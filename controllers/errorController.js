@@ -39,9 +39,12 @@ const handleCastErrorDB = (err) => {
   return new AppError(message, 400);
 };
 const handleDuplicateFieldsDB = (err) => {
-  const value = err.keyValue.name;
-  // const value = err.message.match(/(["'])(\\?.)*?\1/)[0];
-  const message = `Duplicate field value : ${value}. please use another value!`;
+  const values = Object.values(err.keyValue);
+  const message = `Duplicate ${
+    values.length > 1 ? 'values' : 'value'
+  } : ${values.join(' ')}, Please use another ${
+    values.length > 1 ? 'values' : 'value'
+  }!`;
   return new AppError(message, 400);
 };
 const handleValidationErrorDB = (err) => {
@@ -57,14 +60,15 @@ const handleJWTTokenExpiredError = () => {
 };
 
 module.exports = (err, req, res, next) => {
-  console.log('err', err);
   err.statusCode = err.statusCode || 500;
   err.status = err.status || 'error';
-
   if (process.env.NODE_ENV === ENVS.prod) {
     sendErrorDev(err, res);
   } else if (process.env.NODE_ENV === ENVS.dev) {
-    let error = { ...err };
+    let error = Object.defineProperties(
+      {},
+      Object.getOwnPropertyDescriptors(err),
+    );
     if (err.name === 'CastError') {
       error = handleCastErrorDB(error);
     }

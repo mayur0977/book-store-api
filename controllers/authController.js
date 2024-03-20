@@ -10,12 +10,21 @@ const signToken = (id) => {
   });
 };
 exports.signup = catchAsync(async (req, res, next) => {
-  const newUser = await User.create(req.body);
+  const newUser = await User.create({
+    name: req.body.name,
+    email: req.body.email,
+    password: req.body.password,
+    passwordConfirm: req.body.passwordConfirm,
+    role: req.body.role,
+  });
+
   const token = signToken(newUser._id);
 
-  res
-    .status(201)
-    .json({ status: 'success', data: { user: newUser, accessToken: token } });
+  res.status(201).json({
+    status: 'success',
+    message: 'User register successfully',
+    data: { user: newUser, accessToken: token },
+  });
 });
 
 exports.login = catchAsync(async (req, res, next) => {
@@ -32,13 +41,16 @@ exports.login = catchAsync(async (req, res, next) => {
   if (!user || !(await user.correctPassword(password, user.password))) {
     return next(new AppError('Incorrect email or password!', 401));
   }
+
+  console.log('Uq', user);
   // 3) if everything ok ,send token to client
   const token = signToken(user._id);
   res.status(200).json({
     status: 'success',
+    message: '',
     data: {
-      firstName: user.supplierFirstName,
-      lastName: user.supplierLastName,
+      name: user.name,
+      email: user.email,
       userRole: user.role,
       userId: user._id,
       accessToken: token,
@@ -80,7 +92,11 @@ exports.protect = catchAsync(async (req, res, next) => {
       new AppError('User recently changed password! Please login again.', 401),
     );
   }
-  req.user = currentUser;
+  req.user = {
+    userId: currentUser._id,
+    role: currentUser.role,
+    email: currentUser.email,
+  };
   // Grant access to protected route
   next();
 });
