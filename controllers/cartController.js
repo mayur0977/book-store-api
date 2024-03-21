@@ -52,13 +52,14 @@ exports.getCartDetails = async (req, res, next) => {
       return res.status(200).json({
         status: 'success',
         message: '',
-        data: null,
+        data: [],
       });
     }
+
     res.status(200).json({
       status: 'success',
       message: '',
-      data: { cart },
+      data: cart.items,
     });
   } catch (error) {
     next(error);
