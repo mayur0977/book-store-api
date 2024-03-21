@@ -8,7 +8,11 @@ exports.createOrder = async (req, res, next) => {
   try {
     const cart = await Cart.findOne({ user: userId }).populate('items.book');
     if (!cart) {
-      return res.status(404).json({ message: 'Cart not found' });
+      return res.status(200).json({
+        status: 'success',
+        message: '',
+        data: null,
+      });
     }
 
     const orderItems = cart.items.map((item) => ({
